@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿// Вариант 82
+
+#include <iostream>
 #include <iomanip>
 //#include "stdafx.h"
 
