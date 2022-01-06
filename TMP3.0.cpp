@@ -24,7 +24,6 @@ void aroot(Tree* a, int k)
 		a->mas[a->n][lc] = 0;
 		a->mas[a->n][rs] = 0;
 		a->mas[a->n][size] = 1;
-		//a->root = 
 		(a->n)++;
 }
 
@@ -121,7 +120,7 @@ void insert(Tree* t, int num, int k)
 	bool e = true;
 	if (!(t->n)) { add(t, k); 	e = false; }
 	int i = 0; int h;
-	if (rand() % (t->mas[num][size] + 1) == 0 &&!e) { //рандомизированная вставка
+	if (rand() % (t->mas[num][size] + 1) == 0 &&o) { //рандомизированная вставка
 	insertroot(t, num, k); e = false;}
 	while (e)
 	{
@@ -173,25 +172,67 @@ void insert(Tree* t, int num, int k)
 	fixsize(t, num);
 }
 
-
-//node* join(node* p, node* q) // объединение двух деревьев
+//int join(Tree *p, Tree *q, int num) // объединение двух деревьев
 //{
-//	if (!p) return q;
-//	if (!q) return p;
-//	if (rand() % (p->size + q->size) < p->size)
+//	p->root = num; q->root = num;
+//	if (!p->mas[p->root][count]) return 0;
+//	if (!q->mas[q->root][count]) return 0;
+//	
+//	if (rand() % (p->mas[p->root][size] + q->mas[q->root][size]) < p->mas[p->root][size])
 //	{
-//		p->right = join(p->right, q);
-//		fixsize(p);
-//		return p;
+//		p->mas[f(p, (p->mas[p->root][lc]))][rs] = join(p, q, f(p, p->mas[f(p, (p->mas[p->root][lc]))][rs]));
+//		fixsize(p, p->root); cout << "fsdfs";
+//		return f(p, p->mas[p->root][count]);
 //	}
 //	else
 //	{
-//		q->left = join(p, q->left);
-//		fixsize(q);
-//		return q;
+//		cout << "fs2222222dfs";
+//		q->mas[q->root][lc] = join(p, q, f(q, q->mas[q->root][lc]));
+//		fixsize(q, q->root);
+//		return f(q, q->mas[q->root][count]);
 //	}
 //}
 
+void pr(Tree* t, int num)// А - прямой 
+{
+	if (t->mas[num][lc])
+	{
+		pr(t, f(t, t->mas[num][lc]));
+	}
+	else if (t->mas[num][rs]) pr(t, f(t,t->mas[num][rs]));
+	cout<<"--"<< t->mas[num][count];
+}
+
+void sem(Tree* t, int num)// В - симметричный
+{
+	if (t->mas[num][lc])
+	{
+		pr(t, f(t, t->mas[num][lc]));
+	}
+	else if (t->mas[num][rs]) pr(t, f(t, t->mas[num][rs]));
+	cout << "--" << t->mas[num][count];
+}
+
+int join(Tree* p, Tree* q) // объединение двух деревьев, обход А , B - обртаный.
+{
+	if (!p->mas[p->root][count]) return 0;
+	if (!q->mas[q->root][count]) return 0;
+	int a[N] = { 0 }; int z = 1000; int v = 0; a[0] = q->mas[0][count];
+	for (int i = 1; i < q->n; i++)
+		a[i]  = q->mas[i][count]; 
+	for (int i = 1; i < q->n; i++)
+		for (int j = i; j < q->n; j++)
+			if (a[i] > a[j]){
+				int r = a[j];
+				a[j] = a[i];
+				a[i] = r;
+			}
+	for (int j = 0; j < q->n; j++) cout << a[j];
+	for(int i = 1; i < q->n; i++)
+		insert(p, 0, a[i]);
+	insert(p, 0, a[0]);
+
+}
 /*
 node* remove(node* p, int k) // удаление из дерева p первого найденного узла с ключом k 
 {
@@ -220,23 +261,26 @@ void main()
 
 	a.root = 0;
 	insert(&a, a.root, 5);
-	insert(&a, a.root, 2); 
-	insert(&a, a.root, 7);
-	insert(&a, a.root, 6);
+	insert(&a, a.root, 7); 
+	insert(&a, a.root, 3);
+	//insert(&a, a.root, 8);
 
-	/*
+	
+
 	Tree b;
 
 	b.root = 0;
-	insert(&b, b.root, 5);
 	insert(&b, b.root, 2);
-	insert(&b, b.root, 7);
+	insert(&b, b.root,1);
+	//insert(&b, b.root, 3);
 	insert(&b, b.root, 6);
-*/
+
+	join(&a, &b);
 	//cout <<endl << a.mas[1][0] << a.mas[0][0];
 	//cout << a.mas[1][lc]<< endl;
 
-
+	pr(&a, 0);
 	cout << endl; cout << "count" << "lc  " << "rs   " << "size" ; for (int i = 0; i < N; i++) { cout << endl; for (int j = 0; j < 4; j++) cout << a.mas[i][j] << "    "; }
-	//cout << endl; cout << "count" << "lc  " << "rs   " << "size"; for (int i = 0; i < N; i++) { cout << endl; for (int j = 0; j < 4; j++) cout << b.mas[i][j] << "    "; }
+	cout << endl; 
+	cout << endl; cout << "count" << "lc  " << "rs   " << "size"; for (int i = 0; i < N; i++) { cout << endl; for (int j = 0; j < 4; j++) cout << b.mas[i][j] << "    "; }
 }
