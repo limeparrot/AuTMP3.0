@@ -233,27 +233,22 @@ int join(Tree* p, Tree* q) // объединение двух деревьев, 
 	insert(p, 0, a[0]);
 
 }
-/*
-node* remove(node* p, int k) // удаление из дерева p первого найденного узла с ключом k 
+
+int remove(Tree* t, int k, int numb) // удаление из дерева t первого найденного узла с ключом k 
 {
-	if (!p) return p;
-	if (p->key == k)
+	if (!t->n) return 0;
+	if (t->mas[f(t, k)][count] == k)
 	{
-		node* q = join(p->left, p->right);
-		delete p;
-		return q;
+		int q = join(t->mas[f(t, k)][lc], t->mas[f(t, t->mas[f(t, k)][lc])][rs]);
+		t->mas[f(t, k)][count] = 0; 
+		return t->mas[q][count];
 	}
-	else if (k < p->key)
-		p->left = remove(p->left, k);
+	else if (k < t->mas[f(t, k)][count])
+			t->mas[f(t, k)][lc] = remove(t, t->mas[f(t, k)][lc], k);
 	else
-		p->right = remove(p->right, k);
-	return p;
+			t->mas[f(t, t->mas[f(t, k)][lc])][rs] = remove(t, t->mas[f(t, k)][lc], k);
+	return t->mas[f(t, k)][count];
 }
-*/
-
-
-
-
 
 void main()
 {
