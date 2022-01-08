@@ -120,7 +120,7 @@ void insert(Tree* t, int num, int k)
 	bool e = true;
 	if (!(t->n)) { add(t, k); 	e = false; }
 	int i = 0; int h;
-	if (rand() % (t->mas[num][size] + 1) == 0 &&o) { //рандомизированная вставка
+	if (rand() % (t->mas[num][size] + 1) == 0 &&0) { //рандомизированная вставка
 	insertroot(t, num, k); e = false;}
 	while (e)
 	{
@@ -160,7 +160,7 @@ void insert(Tree* t, int num, int k)
 			{
 				h = num;
 				num = t->mas[f(t,(t->mas[f(t, h)][lc]))][rs];
-				if (num == 0) { t->mas[f(t, (t->mas[f(t, h)][lc]))][rs] = add(t, k); cout << t->mas[f(t, (t->mas[f(t, h)][lc]))][rs];   e = false; }
+				if (num == 0) { t->mas[f(t, (t->mas[f(t, h)][lc]))][rs] = add(t, k);    e = false; }
 				else
 				{
 					i++; continue;
@@ -172,45 +172,35 @@ void insert(Tree* t, int num, int k)
 	fixsize(t, num);
 }
 
-//int join(Tree *p, Tree *q, int num) // объединение двух деревьев
-//{
-//	p->root = num; q->root = num;
-//	if (!p->mas[p->root][count]) return 0;
-//	if (!q->mas[q->root][count]) return 0;
-//	
-//	if (rand() % (p->mas[p->root][size] + q->mas[q->root][size]) < p->mas[p->root][size])
-//	{
-//		p->mas[f(p, (p->mas[p->root][lc]))][rs] = join(p, q, f(p, p->mas[f(p, (p->mas[p->root][lc]))][rs]));
-//		fixsize(p, p->root); cout << "fsdfs";
-//		return f(p, p->mas[p->root][count]);
-//	}
-//	else
-//	{
-//		cout << "fs2222222dfs";
-//		q->mas[q->root][lc] = join(p, q, f(q, q->mas[q->root][lc]));
-//		fixsize(q, q->root);
-//		return f(q, q->mas[q->root][count]);
-//	}
-//}
-
 void pr(Tree* t, int num)// А - прямой 
 {
-	if (t->mas[num][lc])
+	cout << t->mas[num][count] << "->";
+
+	if (t->mas[num][lc] != 0) 
 	{
-		pr(t, f(t, t->mas[num][lc]));
+		pr(t, f(t, t->mas[num][lc])); 
 	}
-	else if (t->mas[num][rs]) pr(t, f(t,t->mas[num][rs]));
-	cout<<"--"<< t->mas[num][count];
+
+	if (t->mas[f(t, t->mas[num][lc])][rs] != 0)
+	{
+		pr(t, f(t, t->mas[f(t, t->mas[num][lc])][rs]));
+	}
 }
 
 void sem(Tree* t, int num)// В - симметричный
 {
-	if (t->mas[num][lc])
+	
+
+	if (t->mas[num][lc] != 0)
 	{
 		pr(t, f(t, t->mas[num][lc]));
 	}
-	else if (t->mas[num][rs]) pr(t, f(t, t->mas[num][rs]));
-	cout << "--" << t->mas[num][count];
+	cout << t->mas[num][count] << "->";
+	if (t->mas[f(t, t->mas[num][lc])][rs] != 0)
+	{
+		pr(t, f(t, t->mas[f(t, t->mas[num][lc])][rs]));
+	}
+
 }
 
 int join(Tree* p, Tree* q) // объединение двух деревьев, обход А , B - обртаный.
@@ -227,7 +217,6 @@ int join(Tree* p, Tree* q) // объединение двух деревьев, 
 				a[j] = a[i];
 				a[i] = r;
 			}
-	for (int j = 0; j < q->n; j++) cout << a[j];
 	for(int i = 1; i < q->n; i++)
 		insert(p, 0, a[i]);
 	insert(p, 0, a[0]);
@@ -239,7 +228,7 @@ int remove(Tree* t, int k, int numb) // удаление из дерева t п�
 	if (!t->n) return 0;
 	if (t->mas[f(t, k)][count] == k)
 	{
-		int q = join(t->mas[f(t, k)][lc], t->mas[f(t, t->mas[f(t, k)][lc])][rs]);
+		int q = join(t, t);
 		t->mas[f(t, k)][count] = 0; 
 		return t->mas[q][count];
 	}
@@ -258,24 +247,18 @@ void main()
 	insert(&a, a.root, 5);
 	insert(&a, a.root, 7); 
 	insert(&a, a.root, 3);
-	//insert(&a, a.root, 8);
+	insert(&a, a.root, 8);
+	cout << "Tree A(direct output): "; pr(&a, 0); cout << endl;
 
 	
-
-	Tree b;
+	Tree b; 
 
 	b.root = 0;
 	insert(&b, b.root, 2);
-	insert(&b, b.root,1);
-	//insert(&b, b.root, 3);
+	insert(&b, b.root, 1);
 	insert(&b, b.root, 6);
-
+	cout << "Tree B(symmetric output): "; sem(&b, 0); cout << endl;
+	
 	join(&a, &b);
-	//cout <<endl << a.mas[1][0] << a.mas[0][0];
-	//cout << a.mas[1][lc]<< endl;
-
-	pr(&a, 0);
-	cout << endl; cout << "count" << "lc  " << "rs   " << "size" ; for (int i = 0; i < N; i++) { cout << endl; for (int j = 0; j < 4; j++) cout << a.mas[i][j] << "    "; }
-	cout << endl; 
-	cout << endl; cout << "count" << "lc  " << "rs   " << "size"; for (int i = 0; i < N; i++) { cout << endl; for (int j = 0; j < 4; j++) cout << b.mas[i][j] << "    "; }
+	cout << endl << "Tree A + B(direct output): "; pr(&a, 0);
 }
