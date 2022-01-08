@@ -120,7 +120,7 @@ void insert(Tree* t, int num, int k)
 	bool e = true;
 	if (!(t->n)) { add(t, k); 	e = false; }
 	int i = 0; int h;
-	if (rand() % (t->mas[num][size] + 1) == 0 &&0) { //рандомизированная вставка
+	if (rand() % (t->mas[num][size] + 1) == 0 && o) { //рандомизированная вставка
 	insertroot(t, num, k); e = false;}
 	while (e)
 	{
